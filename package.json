@@ -1,7 +1,7 @@
 {
   "name": "elmlike",
   "description": "Functional utilities for types and data, inspired by Elm.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "source": "src/index.ts",
   "module": "dist/elmlike.mjs",
   "main": "dist/elmlike.js",
