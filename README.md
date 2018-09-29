@@ -3,7 +3,7 @@
 > Functional utilities for types and data, inspired by Elm.
 
 [![npm](https://badgen.net/npm/v/elmlike)](https://www.npmjs.com/package/elmlike)
-[![minified + gzip size](https://badgen.net/bundlephobia/minzip/elmlike)](https://badgen.net/bundlephobia/minzip/elmlike)
+[![minified + gzip size](https://badgen.net/bundlephobia/minzip/elmlike)](https://bundlephobia.com/result?p=elmlike)
 [![npm downloads](https://badgen.net/npm/dm/elmlike)](https://www.npmjs.com/package/elmlike)
 [![dependencies](https://badgen.net/david/dep/fpapado/elmlike)](https://david-dm.org/fpapado/elmlike)
 
