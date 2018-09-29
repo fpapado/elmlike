@@ -23,7 +23,7 @@ const Nothing = (): Nothing => ({
 // PATTERN MATCHING
 
 // Object that encodes a match
-type MatchDefinition<ReturnType, DataType> = {
+type MatchDefinition<DataType, ReturnType> = {
   Just: (a: DataType) => ReturnType;
   Nothing: () => ReturnType;
 };
@@ -34,7 +34,7 @@ type MatchDefinition<ReturnType, DataType> = {
  * @todo: Add curried version?
  * @todo: Figure out if we can have some convenience on the parameters
  */
-const match = <RT, MT>(matchDef: MatchDefinition<RT, MT>, maybe: Maybe<MT>) => {
+const match = <DT, RT>(maybe: Maybe<DT>, matchDef: MatchDefinition<DT, RT>) => {
   switch (maybe.$) {
     case 'Just':
       return matchDef.Just(maybe.a);
@@ -48,13 +48,10 @@ const match = <RT, MT>(matchDef: MatchDefinition<RT, MT>, maybe: Maybe<MT>) => {
 // HELPERS
 
 const withDefault = <A>(def: A, maybe: Maybe<A>): A =>
-  match(
-    {
-      Just: a => a,
-      Nothing: () => def,
-    },
-    maybe
-  );
+  match(maybe, {
+    Just: a => a,
+    Nothing: () => def,
+  });
 
 // MAPPING
 // TODO: Figure out how to avoid the pyramid of doom
@@ -62,14 +59,11 @@ const withDefault = <A>(def: A, maybe: Maybe<A>): A =>
 /** Apply function a -> b if the data exists, and propagate Nothing otherwise
  * (a -> b) -> Maybe a -> Maybe b
  */
-const map = <A, B>(fn: (a: A) => B, maybeA: Maybe<A>): Maybe<B> =>
-  match(
-    {
-      Just: a => Just(fn(a)),
-      Nothing: Nothing,
-    },
-    maybeA
-  );
+const map = <A, B>(fn: (a: A) => B, maybe: Maybe<A>): Maybe<B> =>
+  match(maybe, {
+    Just: a => Just(fn(a)),
+    Nothing: Nothing,
+  });
 
 // TODO: GUARDS
 
@@ -86,20 +80,14 @@ const map2 = <A, B, V>(
   ma: Maybe<A>,
   mb: Maybe<B>
 ): Maybe<V> =>
-  match(
-    {
-      Nothing: Nothing,
-      Just: a =>
-        match(
-          {
-            Just: b => Just(fn(a, b)),
-            Nothing: Nothing,
-          },
-          mb
-        ),
-    },
-    ma
-  );
+  match(ma, {
+    Nothing: Nothing,
+    Just: a =>
+      match(mb, {
+        Just: b => Just(fn(a, b)),
+        Nothing: Nothing,
+      }),
+  });
 
 const map3 = <A, B, C, V>(
   fn: (a: A, b: B, c: C) => V,
@@ -107,27 +95,18 @@ const map3 = <A, B, C, V>(
   mb: Maybe<B>,
   mc: Maybe<C>
 ): Maybe<V> =>
-  match(
-    {
-      Nothing: Nothing,
-      Just: a =>
-        match(
-          {
-            Just: b =>
-              match(
-                {
-                  Just: c => Just(fn(a, b, c)),
-                  Nothing: Nothing,
-                },
-                mc
-              ),
+  match(ma, {
+    Nothing: Nothing,
+    Just: a =>
+      match(mb, {
+        Just: b =>
+          match(mc, {
+            Just: c => Just(fn(a, b, c)),
             Nothing: Nothing,
-          },
-          mb
-        ),
-    },
-    ma
-  );
+          }),
+        Nothing: Nothing,
+      }),
+  });
 
 /** Chain together computations that may fail.
  *
@@ -135,10 +114,7 @@ const map3 = <A, B, C, V>(
  * we propagate Nothing on the Nothing case, instead of something custom.
  */
 const andThen = <A, B>(fn: (a: A) => Maybe<B>) => (maybe: Maybe<A>): Maybe<B> =>
-  match(
-    {
-      Just: fn,
-      Nothing: Nothing,
-    },
-    maybe
-  );
+  match(maybe, {
+    Just: fn,
+    Nothing: Nothing,
+  });
