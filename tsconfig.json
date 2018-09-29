@@ -4,19 +4,15 @@
     "target": "es2015",
     "declaration": true,
     "sourceMap": true,
-    "jsx": "react",
     "allowJs": false,
     "strict": true,
-    "rootDirs": ["src", "stories"],
+    "rootDirs": ["src"],
     "outDir": "ts-build",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "lib": ["es6", "dom"],
-    "baseUrl": "./",
-    "paths": {
-      "react-intersection-observer": ["src/react-intersection-observer.d.ts"]
-    }
+    "baseUrl": "./"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
