@@ -134,7 +134,7 @@ const map3 = <A, B, C, V>(
  * Aside: It is interesting to see this in relation to match, since it is the case where
  * we propagate Nothing on the Nothing case, instead of something custom.
  */
-const andThen = <A, B>(fn: (a: A) => Maybe<B>, maybe: Maybe<A>): Maybe<B> =>
+const andThen = <A, B>(fn: (a: A) => Maybe<B>) => (maybe: Maybe<A>): Maybe<B> =>
   match(
     {
       Just: fn,
