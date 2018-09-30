@@ -1,4 +1,15 @@
-export {Maybe, Just, Nothing, match, withDefault, map, map2, map3, andThen};
+export {
+  Maybe,
+  Just,
+  Nothing,
+  match,
+  matchC,
+  withDefault,
+  map,
+  map2,
+  map3,
+  andThen,
+};
 
 // TYPES
 
@@ -31,7 +42,6 @@ type MatchDefinition<DataType, ReturnType> = {
 /** Function that allows pattern-matching on the tag of Maybe
  * @todo: Decide on whether to call this "case" or "switch" instead
  * Could be called "fold" I guess, but I like match more...
- * @todo: Add curried version?
  * @todo: Figure out if we can have some convenience on the parameters
  */
 const match = <DT, RT>(maybe: Maybe<DT>, matchDef: MatchDefinition<DT, RT>) => {
@@ -43,7 +53,12 @@ const match = <DT, RT>(maybe: Maybe<DT>, matchDef: MatchDefinition<DT, RT>) => {
   }
 };
 
-// TODO: Pipe helper, for readability
+/** Curried version of match. Useful for separating behaviour from data.
+ * @todo: Perhaps there is a nice way to merge this with match?
+ */
+const matchC = <DT, RT>(matchDef: MatchDefinition<DT, RT>) => (
+  maybe: Maybe<DT>
+) => match<DT, RT>(maybe, matchDef);
 
 // HELPERS
 
@@ -65,16 +80,8 @@ const map = <A, B>(fn: (a: A) => B, maybe: Maybe<A>): Maybe<B> =>
     Nothing: Nothing,
   });
 
-// TODO: GUARDS
-
 /** Apply a function if all the arguments are Just a value.
  */
-// const map2 = <A, B, V>(
-//   fn: (a: A, b: B) => V,
-//   maybeA: Maybe<A>,
-//   maybeB: Maybe<B>
-// ): Maybe<V> => andThen(a => andThen(b => Just(fn(a, b)), maybeB), maybeA);
-
 const map2 = <A, B, V>(
   fn: (a: A, b: B) => V,
   ma: Maybe<A>,
@@ -118,3 +125,5 @@ const andThen = <A, B>(fn: (a: A) => Maybe<B>) => (maybe: Maybe<A>): Maybe<B> =>
     Just: fn,
     Nothing: Nothing,
   });
+
+// TODO: GUARDS
