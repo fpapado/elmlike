@@ -1,15 +1,4 @@
-export {
-  Maybe,
-  Just,
-  Nothing,
-  match,
-  matchC,
-  withDefault,
-  map,
-  map2,
-  map3,
-  andThen,
-};
+export {Maybe, Just, Nothing, match, matchC, withDefault, map, map2, map3, andThen};
 
 // TYPES
 
@@ -56,9 +45,8 @@ const match = <DT, RT>(maybe: Maybe<DT>, matchDef: MatchDefinition<DT, RT>) => {
 /** Curried version of match. Useful for separating behaviour from data.
  * @todo: Perhaps there is a nice way to merge this with match?
  */
-const matchC = <DT, RT>(matchDef: MatchDefinition<DT, RT>) => (
-  maybe: Maybe<DT>
-) => match<DT, RT>(maybe, matchDef);
+const matchC = <DT, RT>(matchDef: MatchDefinition<DT, RT>) => (maybe: Maybe<DT>) =>
+  match<DT, RT>(maybe, matchDef);
 
 // HELPERS
 
@@ -82,11 +70,7 @@ const map = <A, B>(fn: (a: A) => B, maybe: Maybe<A>): Maybe<B> =>
 
 /** Apply a function if all the arguments are Just a value.
  */
-const map2 = <A, B, V>(
-  fn: (a: A, b: B) => V,
-  ma: Maybe<A>,
-  mb: Maybe<B>
-): Maybe<V> =>
+const map2 = <A, B, V>(fn: (a: A, b: B) => V, ma: Maybe<A>, mb: Maybe<B>): Maybe<V> =>
   match(ma, {
     Nothing: Nothing,
     Just: a =>
